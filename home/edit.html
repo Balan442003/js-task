@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+  <title>Edit Product</title>
+  <style>
+    form {
+      background-color: black;
+      color: burlywood;
+      padding: 30px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="contanier mt-3">
+    <div id="edit-form">
+      <form id="edit-form" action="">
+        <h1>
+          <center>Edit Products</center>
+        </h1><br><br>
+        <label for="productId">Product Id</label><br>
+        <input type="text" id="productId" name="productId" value="" disabled><br><br>
+        <label for="productName">Product Name</label><br>
+        <input type="text" id="productName" name="productName" value=""><br><br>
+
+        <label for="productQty">Product Quantity</label><br>
+        <input type="number" id="productQty" name="productQty" value=""><br><br>
+
+        <label for="productMrp">Product MRP</label><br>
+        <input type="text" id="productMrp" name="productMrp" value=""><br><br>
+
+        <label for="productSp">Product Sales Price:</label><br>
+        <input type="text" id="productSp" name="productsalesprice" required><br><br>
+
+
+        <button type="submit">Submit</button><br><br><br><br>
+      </form>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+    integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+    integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+    crossorigin="anonymous"></script>
+
+  <script>
+    const loginData = JSON.parse(localStorage.getItem("loginusers")) || [];
+    userName = loginData.username;
+    let editProducts = JSON.parse(localStorage.getItem("edit"));
+
+    editProducts.forEach(product => {
+      console.log(product.productId);
+      document.getElementById('productId').value = product.productId;
+      document.getElementById('productName').value = product.productName;
+      document.getElementById('productQty').value = product.productQty;
+      document.getElementById('productMrp').value = product.productMrp;
+      document.getElementById('productSp').value = product.productSp;
+
+
+      document.getElementById("edit-form").addEventListener("submit", (e) => {
+        e.preventDefault();
+        // let editProducts = JSON.parse(localStorage.getItem("edit"));
+        let existProducts = JSON.parse(localStorage.getItem(userName));
+        id = document.getElementById("productId").value;
+        updateRow(id);
+      });
+
+      function updateRow(data) {
+        let existProducts = JSON.parse(localStorage.getItem(userName));
+
+        let formProductId = parseInt(data);
+        console.log(formProductId);
+        let index = existProducts.findIndex((product) => {
+          return product.productId == data;
+        });
+
+        console.log("Index:", index);
+        if (index !== -1) {
+          existProducts[index].productName =
+            document.getElementById("productName").value;
+          existProducts[index].productQty =
+            document.getElementById("productQty").value;
+          existProducts[index].productMrp =
+            document.getElementById("productMrp").value;
+          existProducts[index].productSp =
+            document.getElementById("productSp").value;
+          localStorage.setItem(userName, JSON.stringify(existProducts));
+          console.log("Product updated successfully.");
+          productDate = new Date();
+          year = productDate.getFullYear();
+          month = productDate.getMonth();
+          day = productDate.getDate();
+          datevalue = `${year}-${month}-${day}`;
+          window.location.href="productview.html";
+        } else {
+          console.log("Product not found.");
+        }
+      }
+    });
+
+
+  </script>
+
+</body>
+
+</html>
